@@ -8,6 +8,13 @@ RUN pecl install -o -f redis \
     && rm -rf /tmp/pear \
     && docker-php-ext-enable redis
 
+# npm 16 install
+RUN curl --silent --location https://deb.nodesource.com/setup_16.x | bash -
+RUN apt-get install -y \
+  nodejs
+RUN echo "Node: " && node -v
+RUN echo "NPM: " && npm -v
+
 WORKDIR /var/www
 COPY . .
 
@@ -18,12 +25,13 @@ ENTRYPOINT [ "docker/entrypoint.sh" ]
 
 # ==============================================================================
 #  node
-FROM node:14-alpine as node
+FROM node:16-alpine as node
 
 WORKDIR /var/www
 COPY . .
 
-RUN npm install --global cross-env
-RUN npm install
+#RUN npm install --global cross-env
+#RUN npm install
+RUN npm install && npm run build
 
 VOLUME /var/www/node_modules

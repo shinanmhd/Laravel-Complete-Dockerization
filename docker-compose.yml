@@ -1,6 +1,7 @@
 version: "3.8"
 services:
 
+    # comment out services which are not needed
     # PHP Service
     php:
         build:
